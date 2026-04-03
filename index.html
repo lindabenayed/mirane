@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الانتشار المستقيمي للضوء </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Tahoma', 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #f3e8ff 0%, #ffe4f0 30%, #fff3cc 60%, #d4f1f9 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+
+       
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" opacity="0.2"><path fill="none" d="M50,50 L80,50 L80,90 L50,90 Z M100,55 L130,55 L130,95 L100,95 Z M160,60 L190,60 L190,100 L160,100 Z" stroke="%239b59b6" stroke-width="2"/><circle cx="280" cy="70" r="20" stroke="%23e84393" stroke-width="2" fill="none"/><polyline points="30,300 60,270 90,300 120,270 150,300" stroke="%23f1c40f" stroke-width="2" fill="none"/><text x="250" y="330" font-size="30" fill="%23e67e22" font-family="Arial">✎</text><text x="320" y="200" font-size="40" fill="%239b59b6" font-family="Arial">📘</text><text x="50" y="220" font-size="35" fill="%23e84393" font-family="Arial">✏️</text><text x="350" y="380" font-size="45" fill="%23f1c40f" font-family="Arial">📐</text><text x="180" y="350" font-size="40" fill="%233498db" font-family="Arial">⚗️</text><text x="20" y="150" font-size="35" fill="%23e67e22" font-family="Arial">🔬</text><text x="330" y="120" font-size="35" fill="%239b59b6" font-family="Arial">📏</text><text x="120" y="120" font-size="30" fill="%23f1c40f" font-family="Arial">🔦</text><text x="270" y="280" font-size="35" fill="%23e84393" font-family="Arial">🧪</text></svg>');
+            background-repeat: repeat;
+            background-size: 140px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .presentation-box {
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(5px);
+            border-radius: 3rem;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.2), 0 0 0 3px white, 0 0 0 6px #ffb8c6;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        .slides-area {
+            padding: 2rem;
+            min-height: 550px;
+        }
+
+        .slide {
+            display: none;
+            animation: fadePop 0.4s ease;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fadePop {
+            from { opacity: 0; transform: scale(0.97); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .card {
+            background: white;
+            border-radius: 2rem;
+            padding: 2rem;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+            border-top: 8px solid #f1c40f;
+            border-right: 4px solid #f1c40f;
+        }
+
+        h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #9b59b6, #e84393, #f1c40f);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: #9b59b6;
+            border-right: 6px solid #f1c40f;
+            padding-right: 1rem;
+            margin-bottom: 1.2rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: #e84393;
+            margin: 1rem 0;
+        }
+
+        p, li {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            color: #2c3e50;
+        }
+
+        .highlight {
+            background: #f9e79f;
+            padding: 0.2rem 1rem;
+            border-radius: 2rem;
+            display: inline-block;
+            font-weight: bold;
+            color: #9b59b6;
+        }
+
+        .beam-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.8rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .beam-card {
+            background: #fef9e6;
+            border-radius: 1.8rem;
+            padding: 1.2rem;
+            text-align: center;
+            width: 210px;
+            transition: 0.2s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-bottom: 5px solid #f1c40f;
+        }
+
+        .beam-card:hover {
+            transform: translateY(-8px);
+            background: #fff5e0;
+        }
+
+        .beam-card i {
+            font-size: 3rem;
+            color: #e84393;
+        }
+
+        .experiment-demo {
+            background: #fff7e0;
+            border-radius: 1.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            border: 2px dashed #f1c40f;
+        }
+
+        .holes-row {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .hole-card {
+            background: #f5e6ff;
+            width: 90px;
+            padding: 10px;
+            border-radius: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .hole {
+            width: 22px;
+            height: 22px;
+            background: #2c3e50;
+            border-radius: 50%;
+            margin: 8px auto;
+            border: 2px solid #e84393;
+        }
+
+        .ray {
+            height: 8px;
+            background: linear-gradient(90deg, #f1c40f, #e67e22);
+            width: 100%;
+            margin: 15px 0;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #f1c40f;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        button {
+            background: #9b59b6;
+            border: none;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #e84393;
+            transform: scale(1.02);
+        }
+
+        .grid-icons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+        }
+
+        .icon-box {
+            background: #fef9e6;
+            padding: 0.8rem;
+            border-radius: 1.2rem;
+            text-align: center;
+            width: 130px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+        }
+
+        .icon-box i {
+            font-size: 2rem;
+            color: #e84393;
+        }
+
+        .nav-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgba(255,255,240,0.95);
+            border-top: 2px solid #f1c40f;
+        }
+
+        .nav-btn {
+            background: #f1c40f;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            cursor: pointer;
+            color: #9b59b6;
+            transition: 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: #e84393;
+            color: white;
+        }
+
+        .indicator {
+            font-size: 1.1rem;
+            background: #9b59b6;
+            color: white;
+            padding: 6px 20px;
+            border-radius: 40px;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+
+        @media (max-width: 700px) {
+            .slides-area { padding: 1rem; }
+            .card { padding: 1rem; }
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.5rem; }
+            .beam-card { width: 160px; }
+        }
+
+        iframe {
+            border-radius: 1rem;
+            width: 100%;
+            height: 250px;
+            border: 3px solid #f1c40f;
+        }
+
+        .cours-note {
+            background: #fef0cc;
+            padding: 1rem;
+            border-radius: 1rem;
+            border-right: 5px solid #e84393;
+        }
+    </style>
+</head>
+<body>
+<div class="presentation-box">
+    <div class="slides-area" id="slidesArea">
+        <!-- الشريحة 1: العنوان -->
+        <div class="slide active" id="slide1">
+            <div class="card" style="text-align: center;">
+                <i class="fas fa-lightbulb" style="font-size: 5rem; color: #f1c40f;"></i>
+                <h1>الانتشار المستقيمي للضوء</h1>
+                <p style="font-size: 1.4rem;">✨ رحلة الضوء في خطوط مستقيمة ✨</p>
+                <div style="margin: 2rem 0;">
+                    <i class="fas fa-arrow-down" style="animation: bounce 1s infinite; color: #e84393;"></i>
+                </div>
+       
+                
+            </div>
+        </div>
+
+        <!-- الشريحة 2: المقدمة -->
+        <div class="slide" id="slide2">
+            <div class="card">
+                <h2>📘 المقدمة</h2>
+                <p>يُعتبر الضوء من أهم الظواهر الفيزيائية في حياتنا اليومية، حيث يمكننا من رؤية الأجسام من حولنا. ومن بين خصائصه الأساسية أنه ينتشر في <span class="highlight">خطوط مستقيمة</span>، وهو ما يُعرف بـ <strong>الانتشار المستقيمي للضوء</strong>.</p>
+                <div class="grid-icons">
+                    <div class="icon-box"><i class="fas fa-eye"></i><br>الرؤية</div>
+                    <div class="icon-box"><i class="fas fa-chalkboard"></i><br>فيزياء</div>
+                    <div class="icon-box"><i class="fas fa-ruler"></i><br>خط مستقيم</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- الشريحة 3: الوضعية الإشكالية -->
+        <div class="slide" id="slide3">
+            <div class="card">
+                <h2>❓ الوضعية الإشكالية</h2>
+                <p><i class="fas fa-moon"></i> <strong>لماذا نرى ظل الأجسام؟</strong></p>
+                <p><i class="fas fa-wall"></i> <strong>ولماذا لا نرى ما يوجد خلف جسم معتم؟</strong></p>
+                <div class="cours-note">
+                    <p><i class="fas fa-question-circle"></i> هذا يقودنا إلى التساؤل:</p>
+                    <p style="font-size: 1.4rem; font-weight: bold;">كيف ينتشر الضوء؟ وهل ينتشر في جميع الاتجاهات أم في خطوط مستقيمة؟</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- الشريحة 4: التجربة العملية مع محاكاة -->
+        <div class="slide" id="slide4">
+            <div class="card">
+                <h2>🧪 التجربة (دليل عملي)</h2>
+                <p><strong>الأدوات:</strong> منبع ضوئي (مصباح أو شمعة) - ثلاث حواجز مثقوبة (ثقوب صغيرة) - شاشة (ورقة بيضاء).</p>
+                <div class="experiment-demo">
+                    <div class="holes-row">
+                        <div>🔦 منبع</div>
+                        <div class="hole-card">حاجز1<div class="hole"></div></div>
+                        <div class="hole-card" id="movableHole">حاجز2<div class="hole"></div></div>
+                        <div class="hole-card">حاجز3<div class="hole"></div></div>
+                        <div>🎯 شاشة</div>
+                    </div>
+                    <div id="rayContainer" class="ray"></div>
+                    <div class="btn-group">
+                        <button id="alignExp">🔆 محاذاة (استقامة)</button>
+                        <button id="misalignExp">🚫 إزاحة الحاجز الأوسط</button>
+                    </div>
+                    <p id="expMessage" class="highlight">✅ نرى الضوء فقط عندما تكون الثقوب في نفس الاستقامة.</p>
+                </div>
+                <p><strong>الملاحظة:</strong> إذا أزحنا أحد الحواجز، يختفي الضوء. هذا دليل على أن الضوء ينتشر في خط مستقيم.</p>
+            </div>
+        </div>
+
+        <!-- الشريحة 5: الحزمة الضوئية (شرح موسع) -->
+        <div class="slide" id="slide5">
+            <div class="card">
+                <h2>🔦 الحزمة الضوئية (Faisceau lumineux)</h2>
+                <p>الحزمة الضوئية هي <strong>مجموعة من الأشعة الضوئية</strong>. الشعاع الضوئي هو خط مستقيم يرمز لاتجاه انتشار الضوء.</p>
+                <div class="beam-grid">
+                    <div class="beam-card">
+                        <i class="fas fa-grip-lines"></i>
+                        <h3>حزمة متوازية</h3>
+                        <p>الأشعة متوازية تماماً.<br><strong>مثال:</strong> ليزر، ضوء الشمس البعيد.<br>تستخدم في <strong>القياس والجراحة</strong>.</p>
+                    </div>
+                    <div class="beam-card">
+                        <i class="fas fa-compress-alt"></i>
+                        <h3>حزمة متقاربة</h3>
+                        <p>الأشعة تتجمع في نقطة واحدة.<br><strong>مثال:</strong> بعد مرورها عبر عدسة محدبة.<br>تستخدم في <strong>المجاهر والكاميرات</strong>.</p>
+                    </div>
+                    <div class="beam-card">
+                        <i class="fas fa-expand-alt"></i>
+                        <h3>حزمة متباعدة</h3>
+                        <p>الأشعة تتباعد من مصدر نقطي.<br><strong>مثال:</strong> مصباح الشارع، شمعة.<br>تستخدم في <strong>الإضاءة العامة</strong>.</p>
+                    </div>
+                </div>
+                <div class="cours-note">
+                    <p><i class="fas fa-lightbulb"></i> <strong>ملاحظة مهمة:</strong> في وسط شفاف ومتجانس، جميع أنواع الحزم تنتشر في خطوط مستقيمة. تغير الاتجاه يحدث فقط عند تغيير الوسط (انكسار) أو مواجهة عائق (انعكاس).</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- الشريحة 6: الاستنتاج -->
+        <div class="slide" id="slide6">
+            <div class="card">
+                <h2>💡 الاستنتاج</h2>
+                <div style="background: #fef0cc; padding: 1.2rem; border-radius: 1.5rem; text-align: center;">
+                    <p style="font-size: 1.8rem; font-weight: bold; color:#9b59b6;">✨ الضوء ينتشر في خطوط مستقيمة ✨</p>
+                    <p>في وسط شفاف ومتجانس</p>
+                </div>
+                <p>➡️ وهذا ما يفسر:</p>
+                <ul>
+                    <li>🌑 <strong>تكوّن الظلال</strong> : الجسم المعتم يقطع الأشعة المستقيمة.</li>
+                    <li>🚫 <strong>عدم رؤية الأجسام خلف الحواجز المعتمة</strong> : الضوء لا ينحني حولها.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- الشريحة 7: تطبيقات في الحياة اليومية -->
+        <div class="slide" id="slide7">
+            <div class="card">
+                <h2>🌍 تطبيقات في الحياة اليومية</h2>
+                <div class="grid-icons">
+                    <div class="icon-box"><i class="fas fa-moon"></i> الظلال<br><small>طبيعية وصناعية</small></div>
+                    <div class="icon-box"><i class="fas fa-sun"></i> الكسوف والخسوف<br><small>ظل القمر والأرض</small></div>
+                    <div class="icon-box"><i class="fas fa-laser"></i> الليزر<br><small>قياسات دقيقة</small></div>
+                    <div class="icon-box"><i class="fas fa-car"></i> المصابيح الأمامية<br><small>توجيه الضوء</small></div>
+                </div>
+                <p>📏 <strong>أمثلة إضافية:</strong> جهاز التسوية في البناء، الكاميرات، توجيه الأطباق المقعرة.</p>
+            </div>
+        </div>
+
+        <!-- الشريحة 8: فيديو تجربة -->
+        <div class="slide" id="slide8">
+            <div class="card">
+                <h2>🎥 شاهد التجربة بنفسك</h2>
+                <p>ابحث على YouTube عن: <strong>"expérience propagation rectiligne de la lumière"</strong></p>
+                <iframe src="https://www.youtube.com/embed/4o5e0_7XZ_U?si=GkE_4bqjF5k9XGk_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <p class="highlight">فيديو يوضح تجربة الحواجز المثقوبة عملياً.</p>
+            </div>
+        </div>
+
+        <!-- الشريحة 9: المصادر -->
+        <div class="slide" id="slide9">
+            <div class="card">
+                <h2>📚 المصادر</h2>
+                <ul>
+                    <li>✔️ الكتاب المدرسي للفيزياء – السنة 8 أساسي</li>
+                    <li>✔️ موقع: <a href="#" style="color:#e84393;">Khan Academy (قسم الضوء)</a></li>
+                    <li>✔️ موقع: <a href="#" style="color:#e84393;">physicsclassroom.com</a></li>
+                    <li>✔️ فيديوهات تعليمية على YouTube (قنوات تعليمية)</li>
+                </ul>
+                <footer>إعداد: عرض تفاعلي للمنهج التونسي</footer>
+            </div>
+        </div>
+
+        <!-- الشريحة 10: خاتمة -->
+        <div class="slide" id="slide10">
+            <div class="card" style="text-align: center;">
+                <h2>🌟 خاتمة</h2>
+                <p>في الختام، يُعد الانتشار المستقيمي للضوء خاصية أساسية تساعدنا على فهم العديد من الظواهر الطبيعية، كما تُستعمل في عدة تطبيقات علمية وتكنولوجية.</p>
+                <i class="fas fa-graduation-cap" style="font-size: 3rem; color: #e84393; margin: 1rem 0;"></i>
+                <p>شكراً لانتباهكم! 🌟</p>
+                <button id="restartBtn">🔄 العودة للبداية</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-controls">
+        <div class="nav-btn" id="prevSlide"><i class="fas fa-chevron-right"></i></div>
+        <div class="indicator" id="slideCounter">1 / 10</div>
+        <div class="nav-btn" id="nextSlide"><i class="fas fa-chevron-left"></i></div>
+    </div>
+</div>
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    let currentIdx = 0;
+    const total = slides.length;
+
+    function showSlide(index) {
+        slides.forEach((s, i) => {
+            s.classList.toggle('active', i === index);
+        });
+        document.getElementById('slideCounter').innerText = `${index+1} / ${total}`;
+    }
+
+    function next() { if (currentIdx < total-1) { currentIdx++; showSlide(currentIdx); } }
+    function prev() { if (currentIdx > 0) { currentIdx--; showSlide(currentIdx); } }
+
+    document.getElementById('nextSlide').addEventListener('click', next);
+    document.getElementById('prevSlide').addEventListener('click', prev);
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') next();
+        if (e.key === 'ArrowRight') prev();
+    });
+    const restart = document.getElementById('restartBtn');
+    if (restart) restart.addEventListener('click', () => { currentIdx = 0; showSlide(0); });
+
+    // محاكاة التجربة في الشريحة 4
+    const alignBtn = document.getElementById('alignExp');
+    const misalignBtn = document.getElementById('misalignExp');
+    const movable = document.getElementById('movableHole');
+    const expMsg = document.getElementById('expMessage');
+    const rayDiv = document.getElementById('rayContainer');
+
+    if (alignBtn && misalignBtn) {
+        alignBtn.addEventListener('click', () => {
+            movable.style.transform = 'translateY(0px)';
+            rayDiv.style.background = 'linear-gradient(90deg, #f1c40f, #e67e22)';
+            rayDiv.style.boxShadow = '0 0 15px #f1c40f';
+            expMsg.innerHTML = '✅ ✅ نرى الضوء على الشاشة! الثقوب مستقيمة.';
+            expMsg.style.background = '#d5f5e3';
+        });
+        misalignBtn.addEventListener('click', () => {
+            movable.style.transform = 'translateY(25px)';
+            rayDiv.style.background = '#ccc';
+            rayDiv.style.boxShadow = 'none';
+            expMsg.innerHTML = '❌ ❌ اختفى الضوء! الثقوب ليست على استقامة.';
+            expMsg.style.background = '#fadbd8';
+        });
+        alignBtn.click();
+    }
+</script>
+<style>
+    @keyframes bounce {
+        0%,100%{ transform: translateY(0); }
+        50%{ transform: translateY(8px); }
+    }
+    a { text-decoration: none; font-weight: bold; }
+    a:hover { text-decoration: underline; }
+</style>
+</body>
+</html>
